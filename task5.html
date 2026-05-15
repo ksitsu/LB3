@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Задание 5 - Анкета</title>
+    <style>
+        body { font-family: Tahoma, sans-serif; padding: 20px; }
+        .hidden { display: none; }
+        .error { color: red; font-size: 12px; margin-left: 10px; }
+        .form-block { margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <h2 id="formTitle">Заполнить анкету</h2>
+    <div id="formContainer">
+        <div class="form-block">
+            <label>Имя: <input type="text" id="nameInput" oninput="validateForm()"></label> 
+            <span id="nameErr" class="error"></span>
+        </div>
+        <div class="form-block">
+            <label>Возраст: <input type="number" id="ageInput" min="0" oninput="validateForm()"></label> 
+            <span id="ageErr" class="error"></span>
+        </div>
+        <div class="form-block">
+            <label>Пол (М/Ж): <input type="text" id="genderInput" maxlength="1" oninput="validateForm()"></label> 
+            <span id="genderErr" class="error"></span>
+        </div>
+        
+        <div class="form-block">
+            <label><input type="checkbox" id="agreeCheck"> Согласен на обработку данных</label>
+        </div>
+        <div class="form-block">
+            <label>Дополнительная информация: <input type="text" id="aboutInput"></label>
+        </div>
+
+        <button id="submitBtn" class="hidden" onclick="submitForm()">Меня возьмут</button>
+    </div>
+
+    <script>
+        function validateForm() {
+            let name = document.getElementById('nameInput').value;
+            let age = document.getElementById('ageInput').value;
+            let gender = document.getElementById('genderInput').value.toUpperCase();
+            
+            let isValid = true;
+
+            if (!/^[А-Яа-яA-Za-z\s]+$/.test(name) && name !== "") {
+                document.getElementById('nameErr').innerText = "Только буквы!";
+                isValid = false;
+            } else { document.getElementById('nameErr').innerText = ""; }
+
+            if (age !== "" && age < 0) {
+                document.getElementById('ageErr').innerText = "Неотрицательное число!";
+                isValid = false;
+            } else { document.getElementById('ageErr').innerText = ""; }
+
+            if (gender !== "" && gender !== 'М' && gender !== 'Ж') {
+                document.getElementById('genderErr').innerText = "Только М или Ж!";
+                isValid = false;
+            } else { document.getElementById('genderErr').innerText = ""; }
+
+            if (isValid && name && age && gender) {
+                document.getElementById('submitBtn').classList.remove('hidden');
+            } else {
+                document.getElementById('submitBtn').classList.add('hidden');
+            }
+        }
+
+        function submitForm() {
+            document.getElementById('agreeCheck').disabled = true; 
+            document.getElementById('formTitle').classList.add('hidden');
+            alert("Анкета успешно принята!");
+        }
+    </script>
+</body>
+</html>

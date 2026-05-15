@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Задание 4 - Стилизация и DOM</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            transition: background-color 0.5s;
+            color: #333; 
+            font-size: 16px; 
+        }
+        .resume-card {
+            border: 2px solid #005f73; 
+            border-radius: 10px;
+            padding: 20px;
+            width: 350px;
+            margin: 20px auto;
+            background: white;
+            box-shadow: 4px 4px 10px rgba(0,0,0,0.2); 
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .resume-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 6px 6px 15px rgba(0,0,0,0.3); 
+            color: #005f73; 
+        }
+        img { width: 100%; border-radius: 5px; }
+        input { margin-top: 10px; padding: 5px; width: 90%; }
+        button { margin-top: 10px; padding: 5px 10px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <script>
+        // Код из задания 3 (как требует методичка)
+        let isAgeConfirmed = false;
+        while (!isAgeConfirmed) {
+            let age = prompt('Сколько вам лет?', '20');
+            if (age !== null) {
+                isAgeConfirmed = confirm('Вы уверены, что вам ' + age + '?');
+            } else {
+                break;
+            }
+        }
+    </script>
+
+    <div class="resume-card">
+        <img src="https://www.interfax-russia.ru/storage/uploads/logo/2025/11/19/7847e1ec7c47a107961f01302b81dbc7.png" alt="Фото">
+        <h2><span id="firstName">Никита</span> <span id="lastName">Машков</span></h2>
+        <p>Студент МГТУ «СТАНКИН»</p>
+        
+        <input type="text" id="newLastName" placeholder="Введите новую фамилию">
+        <button onclick="changeLastName()">Изменить фамилию</button>
+    </div>
+
+    <div style="text-align: center;">
+        <button onclick="changeBg()">Случайный фон страницы</button>
+    </div>
+
+    <script>
+        function changeLastName() {
+            let newName = document.getElementById('newLastName').value;
+            if(newName) {
+                document.getElementById('lastName').innerText = newName;
+            }
+        }
+        function changeBg() {
+            let randomColor = '#' + Math.floor(Math.random()*16777215).toString(16);
+            document.body.style.backgroundColor = randomColor;
+        }
+    </script>
+</body>
+</html>

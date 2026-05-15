@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Резюме | Никита Машков</title>
+    <style>
+        /* CSS Переменные для светлой и темной темы */
+        :root {
+            --bg-color: #f0f4f8;
+            --text-color: #1a202c;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --card-border: rgba(255, 255, 255, 0.5);
+            --accent-color: #3182ce;
+            --accent-hover: #2b6cb0;
+            --gradient-1: #4299e1;
+            --gradient-2: #805ad5;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            --nav-bg: rgba(255, 255, 255, 0.7);
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #111827;
+            --text-color: #f3f4f6;
+            --card-bg: rgba(31, 41, 55, 0.7);
+            --card-border: rgba(55, 65, 81, 0.5);
+            --accent-color: #60a5fa;
+            --accent-hover: #93c5fd;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            --nav-bg: rgba(17, 24, 39, 0.8);
+        }
+
+        /* Базовые стили */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: background-color 0.4s ease, color 0.4s ease;
+            overflow-x: hidden;
+        }
+
+        /* Навигация и переключатель темы */
+        nav {
+            position: fixed; top: 0; width: 100%;
+            background: var(--nav-bg);
+            backdrop-filter: blur(10px); /* Эффект матового стекла */
+            border-bottom: 1px solid var(--card-border);
+            padding: 15px 5%; display: flex;
+            justify-content: space-between; align-items: center;
+            z-index: 1000; transition: background 0.4s;
+        }
+
+        .logo { font-weight: 800; font-size: 1.2rem; letter-spacing: 1px; }
+        
+        .theme-toggle {
+            background: none; border: none; font-size: 1.5rem;
+            cursor: pointer; padding: 5px; border-radius: 50%;
+            transition: transform 0.3s ease;
+            color: var(--text-color);
+        }
+        .theme-toggle:hover { transform: rotate(20deg) scale(1.1); }
+
+        /* Контейнер */
+        .container { max-width: 900px; margin: 100px auto 40px; padding: 0 20px; }
+
+        /* Секции */
+        section {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 40px; margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(20px);
+            opacity: 0; transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), 
+                        transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), 
+                        box-shadow 0.3s ease;
+        }
+        
+        section:hover { box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1); }
+        section.visible { opacity: 1; transform: translateY(0); }
+
+        /* Заголовки */
+        h1, h2, h3 { font-weight: 700; margin-bottom: 15px; }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, var(--gradient-1), var(--gradient-2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2.5rem;
+        }
+
+        .section-title {
+            position: relative; display: inline-block;
+            margin-bottom: 30px; color: var(--accent-color);
+        }
+        .section-title::after {
+            content: ''; position: absolute; left: 0; bottom: -5px;
+            width: 50%; height: 3px; background: var(--accent-color);
+            border-radius: 2px; transition: width 0.3s;
+        }
+        section:hover .section-title::after { width: 100%; }
+
+        /* Элементы опыта и образования */
+        .timeline-item {
+            border-left: 2px solid var(--accent-color);
+            padding-left: 20px; margin-bottom: 25px; position: relative;
+        }
+        .timeline-item::before {
+            content: ''; position: absolute; left: -7px; top: 5px;
+            width: 12px; height: 12px; background: var(--accent-color);
+            border-radius: 50%; box-shadow: 0 0 10px var(--accent-color);
+        }
+        .date-badge {
+            font-size: 0.85rem; font-weight: 600;
+            background: rgba(49, 130, 206, 0.1); color: var(--accent-color);
+            padding: 4px 10px; border-radius: 20px; display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        /* Навыки (Интерактивные теги) */
+        .grid-skills {
+            display: flex; flex-wrap: wrap; gap: 12px;
+        }
+        .skill-tag {
+            background: transparent; color: var(--text-color);
+            padding: 8px 18px; border-radius: 30px;
+            border: 2px solid var(--accent-color);
+            font-weight: 600; cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .skill-tag:hover {
+            background: var(--accent-color); color: white;
+            transform: translateY(-3px); box-shadow: 0 5px 15px rgba(49, 130, 206, 0.4);
+        }
+
+        /* Кнопки */
+        .btn-group { display: flex; gap: 15px; margin-top: 20px; }
+        .btn {
+            background: linear-gradient(135deg, var(--gradient-1), var(--gradient-2));
+            color: white; padding: 12px 24px; border: none; border-radius: 30px;
+            font-weight: 600; cursor: pointer; transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(66, 153, 225, 0.3);
+            text-decoration: none; display: inline-block;
+        }
+        .btn:hover {
+            transform: translateY(-2px); box-shadow: 0 8px 20px rgba(66, 153, 225, 0.5);
+            filter: brightness(1.1);
+        }
+        .btn-outline {
+            background: transparent; border: 2px solid var(--accent-color);
+            color: var(--text-color); box-shadow: none;
+        }
+        .btn-outline:hover { background: var(--accent-color); color: white; }
+
+        /* Форма обратной связи */
+        .form-group { margin-bottom: 20px; }
+        .form-control {
+            width: 100%; padding: 15px; border-radius: 10px;
+            background: rgba(0,0,0,0.03); color: var(--text-color);
+            border: 1px solid var(--card-border); transition: all 0.3s;
+            font-family: inherit; resize: vertical;
+        }
+        [data-theme="dark"] .form-control { background: rgba(255,255,255,0.05); }
+        .form-control:focus {
+            outline: none; border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.2);
+        }
+        .error-msg { color: #ef4444; font-size: 0.85rem; display: none; margin-top: 5px; }
+
+        /* Адаптивность */
+        @media (max-width: 600px) {
+            .btn-group { flex-direction: column; }
+            section { padding: 25px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Навигация -->
+    <nav>
+        <div class="logo">NM_</div>
+        <button class="theme-toggle" id="themeToggle" aria-label="Переключить тему">☀️</button>
+    </nav>
+
+    <div class="container">
+        <!-- Секция: Шапка / Обо мне -->
+        <section class="animate-on-scroll">
+            <h1 class="gradient-text">Никита Машков</h1>
+            <h3>Студент / Data Analyst / Разработчик</h3>
+            <p>Я целеустремленный студент МГТУ «СТАНКИН» (группа АДБ-23-08), увлекающийся аналитикой данных и разработкой современного ПО. Имею опыт работы с языком Python, библиотекой OpenAI и актуальными веб-технологиями. Быстро учусь, умею работать в команде и всегда стремлюсь к написанию чистого кода.</p>
+            
+            <div class="btn-group">
+                <a href="#" class="btn" onclick="alert('Генерация PDF-резюме...')">📄 Скачать CV</a>
+                <button class="btn btn-outline" onclick="scrollToContact()">✉️ Связаться</button>
+            </div>
+        </section>
+
+        <!-- Секция: Опыт работы -->
+        <section class="animate-on-scroll">
+            <h2 class="section-title">Опыт работы</h2>
+            
+            <div class="timeline-item">
+                <div class="date-badge">Июнь 2026 — Июль 2026</div>
+                <h3>АО «Руна»</h3>
+                <p><strong>Стажер</strong></p>
+                <p>Участие в профессиональной стажировке. Анализ бизнес-процессов, оптимизация внутренних задач компании, работа с документацией и данными.</p>
+            </div>
+
+            <div class="timeline-item">
+                <div class="date-badge">2025</div>
+                <h3>Ростелеком</h3>
+                <p><strong>Участник проектной программы</strong></p>
+                <p>Участие в образовательном интенсиве "Практика по аналитике данных 2025". Решение командных бизнес-кейсов, сбор метрик и построение отчетов.</p>
+            </div>
+        </section>
+
+        <!-- Секция: Образование -->
+        <section class="animate-on-scroll">
+            <h2 class="section-title">Образование</h2>
+            <div class="timeline-item">
+                <div class="date-badge">2024 — 2026</div>
+                <h3>МГТУ «СТАНКИН»</h3>
+                <p>Высшее образование. Профиль: аналитика и управление базами данных. Изучение алгоритмов, архитектуры ЭВМ и современных языков программирования.</p>
+            </div>
+        </section>
+
+        <!-- Секция: Навыки -->
+        <section class="animate-on-scroll">
+            <h2 class="section-title">Ключевые навыки</h2>
+            <div class="grid-skills">
+                <div class="skill-tag">HTML5 & CSS3</div>
+                <div class="skill-tag">JavaScript (ES6+)</div>
+                <div class="skill-tag">Python</div>
+                <div class="skill-tag">OpenAI API</div>
+                <div class="skill-tag">Аналитика данных</div>
+                <div class="skill-tag">Git & GitHub</div>
+                <div class="skill-tag">PythonAnywhere</div>
+                <div class="skill-tag">Адаптивная верстка</div>
+            </div>
+        </section>
+
+        <!-- Секция: Контакты -->
+        <section class="animate-on-scroll" id="contactSection">
+            <h2 class="section-title">Останемся на связи</h2>
+            <form id="contactForm" onsubmit="submitContact(event)">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="contactName" placeholder="Ваше имя">
+                    <div class="error-msg" id="errName">Пожалуйста, введите ваше имя</div>
+                </div>
+                <div class="form-group">
+                    <input type="email" class="form-control" id="contactEmail" placeholder="Ваш Email (например, mail@example.com)">
+                    <div class="error-msg" id="errEmail">Введите корректный email (с символом @)</div>
+                </div>
+                <div class="form-group">
+                    <textarea class="form-control" id="contactMsg" rows="4" placeholder="Напишите сообщение..."></textarea>
+                    <div class="error-msg" id="errMsg">Сообщение не может быть пустым</div>
+                </div>
+                <button type="submit" class="btn">🚀 Отправить сообщение</button>
+            </form>
+        </section>
+    </div>
+
+    <script>
+        // --- 1. Смена светлой и темной темы ---
+        const themeBtn = document.getElementById('themeToggle');
+        const rootElement = document.documentElement;
+        
+        // Проверяем сохраненную тему в localStorage
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        rootElement.setAttribute('data-theme', savedTheme);
+        updateThemeIcon(savedTheme);
+
+        themeBtn.addEventListener('click', () => {
+            const currentTheme = rootElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            rootElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+        });
+
+        function updateThemeIcon(theme) {
+            themeBtn.textContent = theme === 'light' ? '🌙' : '☀️';
+        }
+
+        // --- 2. Плавный скролл к контактам ---
+        function scrollToContact() {
+            document.getElementById('contactSection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // --- 3. Анимация появления элементов при скролле ---
+        const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target); // Анимировать только 1 раз
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-on-scroll').forEach((el) => {
+            observer.observe(el);
+        });
+
+        // --- 4. Валидация формы ---
+        function submitContact(e) {
+            e.preventDefault();
+            let valid = true;
+            const name = document.getElementById('contactName');
+            const email = document.getElementById('contactEmail');
+            const msg = document.getElementById('contactMsg');
+
+            // Проверка имени
+            if(!name.value.trim()) { 
+                document.getElementById('errName').style.display = 'block'; 
+                name.style.borderColor = '#ef4444'; valid = false; 
+            } else { 
+                document.getElementById('errName').style.display = 'none'; 
+                name.style.borderColor = 'var(--card-border)'; 
+            }
+
+            // Проверка Email
+            if(!email.value.includes('@') || !email.value.includes('.')) { 
+                document.getElementById('errEmail').style.display = 'block'; 
+                email.style.borderColor = '#ef4444'; valid = false; 
+            } else { 
+                document.getElementById('errEmail').style.display = 'none'; 
+                email.style.borderColor = 'var(--card-border)'; 
+            }
+
+            // Проверка сообщения
+            if(!msg.value.trim()) { 
+                document.getElementById('errMsg').style.display = 'block'; 
+                msg.style.borderColor = '#ef4444'; valid = false; 
+            } else { 
+                document.getElementById('errMsg').style.display = 'none'; 
+                msg.style.borderColor = 'var(--card-border)'; 
+            }
+
+            // Успешная отправка
+            if(valid) {
+                const btn = e.target.querySelector('button');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '✅ Успешно отправлено!';
+                btn.style.background = '#10b981';
+                
+                setTimeout(() => {
+                    alert('Спасибо, ' + name.value + '! Ваше сообщение отправлено.');
+                    e.target.reset();
+                    btn.innerHTML = originalText;
+                    btn.style.background = ''; // Возврат к градиенту
+                }, 500);
+            }
+        }
+    </script>
+</body>
+</html>
